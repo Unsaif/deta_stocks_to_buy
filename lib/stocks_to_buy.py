@@ -1,8 +1,14 @@
 import pandas as pd
 from deta import Deta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # take environment variables from .env.
+
+deta_id = os.getenv("DETA")
 
 # Initialize with a Project Key
-deta = Deta("a0zd0kwp_zP8cFJdLzpuSB3YR7N9TyAjbR2LYaeQp")
+deta = Deta(deta_id)
 
 def alpaca_translation(df, name, doc_id, date): #finds tickers to buy for alpaca
     trades = deta.Base("Trades")

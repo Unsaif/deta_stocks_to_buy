@@ -7,9 +7,15 @@ import pandas as pd
 from datetime import date
 from io import BytesIO
 from deta import Deta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # take environment variables from .env.
+
+deta_id = os.getenv("DETA")
 
 # Initialize with a Project Key
-deta = Deta("a0zd0kwp_zP8cFJdLzpuSB3YR7N9TyAjbR2LYaeQp")
+deta = Deta(deta_id)
 
 def script():
 
@@ -56,6 +62,7 @@ def script():
                     stocks.append(ticker)
         except Exception as err:
             print(err)
+            print(key)
 
     stocks = list(set(stocks))
 

@@ -2,9 +2,15 @@ from . import get_pdf_details
 from io import BytesIO
 from urllib.request import urlopen
 from deta import Deta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # take environment variables from .env.
+
+deta_id = os.getenv("DETA")
 
 # Initialize with a Project Key
-deta = Deta("a0zd0kwp_zP8cFJdLzpuSB3YR7N9TyAjbR2LYaeQp")
+deta = Deta(deta_id)
 
 def gettradingdataframes(df, id_df, pdf_file_url):
     people = deta.Base("People")
@@ -22,7 +28,7 @@ def gettradingdataframes(df, id_df, pdf_file_url):
                 r = urlopen(f"{pdf_file_url}{doc_id}.pdf")
                 fileReader = BytesIO(r.read())
 
-                df_details = get_pdf_details.getpdfdetails(fileReader)
+                df_details = get_pdf_details.getpdfdetails(fileReader, f"{first_name} {last_name}")
                 trading_dataframes[key] = df_details
                 
                 #update doc_id
@@ -32,5 +38,7 @@ def gettradingdataframes(df, id_df, pdf_file_url):
             else:
                 pass
         except IndexError as err:
+            print(err)
+            print(f"{first_name} {last_name}")
             pass
     return trading_dataframes

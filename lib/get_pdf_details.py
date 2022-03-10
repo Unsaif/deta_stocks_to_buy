@@ -2,7 +2,7 @@ import pandas as pd
 import fitz
 import re
 
-def getpdfdetails(f):
+def getpdfdetails(f, name):
     columns = ["Ticker", "Type", "Description"] 
     df = pd.DataFrame(columns = columns)
     rows = []
@@ -54,5 +54,7 @@ def getpdfdetails(f):
                         row = []
         df = pd.DataFrame(rows, columns=columns)
         return df
-    except RuntimeError:
+    except RuntimeError as err:
+        print(err)
+        print(name)
         return df

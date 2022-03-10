@@ -2,9 +2,15 @@ from fastapi import FastAPI
 from lib import script
 from deta import Deta
 from pydantic import BaseModel
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # take environment variables from .env.
+
+deta_id = os.getenv("DETA")
 
 # Initialize with a Project Key
-deta = Deta("a0zd0kwp_zP8cFJdLzpuSB3YR7N9TyAjbR2LYaeQp")
+deta = Deta(deta_id)
 people = deta.Base("People")
 trades = deta.Base("Trades")
 
@@ -30,5 +36,9 @@ async def add_person(person: Person):
     people.put(person.dict())
     return person
 
-#TODO update person
-
+@app.put("/update_person/{key}", response_model=Person)
+async def update_person(key: str, person: Person):
+    body = person.dict()
+    body["key"] = key
+    people.put(body, key)
+    return body
